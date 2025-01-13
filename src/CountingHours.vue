@@ -16,6 +16,8 @@
         />
         <input v-model="newTag.color" type="color" />
         <button @click="addTag">Добавить тег</button>
+        <button @click="resetTags">Сбросить теги</button>
+        <button @click="resetEvents">Очистить планирование</button>
       </div>
       <div>
         <span class="error" v-if="isNotEnterName"
@@ -143,10 +145,16 @@
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
 
+const tempateTags = [
+  { name: "Работа", color: "#48BB78" },
+  { name: "Учёба", color: "#4A5568" },
+];
+
 const tags = ref([
   { name: "Работа", color: "#48BB78" },
   { name: "Учёба", color: "#4A5568" },
 ]);
+
 const newTag = ref({ name: "", color: "#3182CE" });
 const events = ref([]);
 const selecting = ref(false);
@@ -198,24 +206,35 @@ onMounted(loadFromLocalStorage);
 const addTag = () => {
   if (!newTag.value.name) {
     isNotEnterName.value = true;
+    setTimeout(() => (isNotEnterName.value = false), 3000);
     return;
   }
-  isNotEnterName.value = false;
 
   if (tags.value.some((tag) => tag.color === newTag.value.color)) {
     isHaveThisColor.value = true;
+    setTimeout(() => (isHaveThisColor.value = false), 3000);
     return;
   }
-  isHaveThisColor.value = false;
 
   if (tags.value.some((tag) => tag.name === newTag.value.name)) {
     isHaveThisNameTag.value = true;
+    setTimeout(() => (isHaveThisNameTag.value = false), 3000);
+
     return;
   }
-  isHaveThisNameTag.value = false;
 
   tags.value.push({ ...newTag.value });
   newTag.value = { name: "", color: "#3182CE" };
+};
+
+const resetTags = () => {
+  tags.value = tempateTags;
+  saveToLocalStorage();
+};
+
+const resetEvents = () => {
+  events.value = [];
+  saveToLocalStorage();
 };
 
 const deleteTag = (idx) => {
@@ -226,10 +245,9 @@ const deleteTag = (idx) => {
   let tagObject = tags.value[idx];
   if (events.value.some((item) => item.tag === tagObject.name)) {
     isCanNotDeleteThisTagColor.value = true;
+    setTimeout(() => (isCanNotDeleteThisTagColor.value = false), 3000);
     return;
   }
-
-  isCanNotDeleteThisTagColor.value = false;
 
   tags.value.splice(idx, 1);
 };
@@ -429,6 +447,7 @@ const formatEventTime = (event) => {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .input-color-block {
@@ -526,7 +545,7 @@ const formatEventTime = (event) => {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-top: 10px;
+  margin-top: 30px;
   margin-bottom: 10px;
 }
 
