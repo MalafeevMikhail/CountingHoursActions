@@ -1,24 +1,7 @@
 # counting_times
 
-## Project setup
-```
-npm install
-```
+## Описание
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Проект сделан больше для себя, с целью оптимизации подсчетов часов.
+Так как я работаю и учусь мне нужно видеть план и значения моих часов.
+Есть задача - сделал оптимизацию :)
